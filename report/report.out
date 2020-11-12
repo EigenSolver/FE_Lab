@@ -1,0 +1,16 @@
+\BOOKMARK [1][-]{section.1}{Introduction and Problem Statement}{}% 1
+\BOOKMARK [1][-]{section.2}{Mathematical Model}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Problem Formulation}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{Weak formulation}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Galerkin Equation on Spherical Surface}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Linear Lagrange Interpolating}{section.2}% 6
+\BOOKMARK [2][-]{subsection.2.5}{Element Matrix and Element Vector}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.6}{Assembly of Finite Elements}{section.2}% 8
+\BOOKMARK [1][-]{section.3}{Implementation}{}% 9
+\BOOKMARK [2][-]{subsection.3.1}{Geometry Building}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.2}{Mesh Generation}{section.3}% 11
+\BOOKMARK [2][-]{subsection.3.3}{Algorithm Implementation}{section.3}% 12
+\BOOKMARK [1][-]{section.4}{Results and Discussion}{}% 13
+\BOOKMARK [2][-]{subsection.4.1}{Result Demonstration}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.2}{Further Improvement}{section.4}% 15
+\BOOKMARK [1][-]{appendix.A}{File Inventory Introduction}{}% 16
