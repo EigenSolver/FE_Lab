@@ -55,7 +55,7 @@
 \large
 \emph{Authors:}\\[0.5cm]
 Yuning Zhang(5274796)\\
-Danning Chen()\\[1.5cm]						% Author info
+Danning Chen(5239257)\\[1.5cm]						% Author info
 {\large \today}\\[5cm]
 \includegraphics[width=0.6\textwidth]{images/TU_delft_logo.jpg}\\[1cm] 	% University logo
 \vfill 
@@ -350,25 +350,27 @@ as shown in Fig.\ref{fig:mesh}.
 The mesh file is exported in the \verb|.msh| format, at version 2.2.
 
 
-\subsection{Algorithm Implementation}
+\subsection{FEM Solution Implementation}
 The algorithm is implemented in \verb|Julia|, based on the code provided in the sample.
-The Gmsh format data is processed using the \verb|CompScienceMeshes.jl| library.
-We added some necessary modifications in the module of elementary matrix and incentive function.
+The embeded array-based syntax and operation makes vector calculation quite convenient.
+The Gmsh format data is loaded and processed using the \verb|CompScienceMeshes.jl| library.
 
 The basic procedures implemented in the FEM are listed below
 \begin{enumerate}
-    \item Load meshing file and parse the data.
-    \item Detect boundary nodes and associate nodes with elements.
-    \item Iterate over elements and build element matrix and vectors.
-    \item Assembly the matrix and vectors in Galerkin Equation
-    \item Solve the equation with numerical inversion of the matrix
-    \item Post-processing and visualization
+    \item Define the parameters (epicenter, decay rate, wavelength and so, on) and incentive functions \verb|f|. 
+    \item Load meshing file and parse the data. Then the data is reorganized into structured list of elements containing local nodes. 
+    This is implemented with functions \verb|read_gmsh_mesh| and \verb|skeleton| from \verb|CompScienceMeshes.jl|. 
+    \item Detect boundary and interior nodes so that we can build elements matrix and vectors for different nodes.
+    \item Iterate over elements and building element matrix and vectors, with \verb|elementmatrix| \verb|elementvector|.
+    Also we added some necessary modifications in the module of elementary matrix to adjust for the spherical surface.
+    \item Assembly the matrix and vectors in Galerkin Equation using \verb|assemblematrix| \verb|assemblevector|. The 
+    mapping from local nodes index to global index, which is necessary to build the global matrix, is implemented by \verb|localtoglobal|.
+    \item Solve the equation with numerical inversion of the matrix. The inversion of matrix, which is the most computation-intensive part of FEM, is implemented using 
+    the build-in function of Julia. 
+    \item Post-processing and visualization, using the \verb|Makie.jl| and \verb|JuliaPlot.jl|
 \end{enumerate}
 
-The embeded array-based syntax and operation makes vector calculation quite convenient.
-The inversion of matrix, which is the most computation-intensive part of FEM, is implemented using 
-the build-in function of Julia. 
-
+% \newpage
 \section{Results and Discussion}
 \subsection{Result Demonstration}
 
@@ -396,8 +398,7 @@ North Atlantic (40.4,-43.2).
 
 
 With more than $10^4$ element, the solution of this FEM model can be finished in 10 sec on 
-a 8-core desktop PC, which has proved the efficiency of the algorithm.
-
+a 8-core desktop PC, which has proved the efficiency of the algorithm. 
 
 
 \begin{figure*}
@@ -433,9 +434,9 @@ a 8-core desktop PC, which has proved the efficiency of the algorithm.
         {{\small Pacific Ocean}}    
         \label{fig:sub4}
     \end{subfigure}
-    \caption[ The average and standard deviation of critical parameters ]
-    {\small Tsunami visualization above different oceans area} 
-    \label{fig:result_view}
+    \caption[ ]
+    {\small Tsunami visualization with an epicenter on the Pacific} 
+    \label{fig:result_view_2}
 \end{figure*}
 
 
@@ -456,15 +457,47 @@ west side adjacent to Asia and Australia and east side closed by North and South
 With a long wavelength (4000 km), the tsunami wave can't travel through the narrow channels to Pacific,
 and diffraction is also disabled.
 
+Similar result can be acquired when we set the epiccenter on the North Pacific (15.75,154.5).
+The tsunami will not travel acress the globe and impact the coastline of Atlantic and Indian Ocean.
 
 
-\subsection{Further Improvement}
+% \begin{figure*}
+%     \centering
+%     \begin{subfigure}[b]{0.475\textwidth}
+%         \centering
+%         \includegraphics[width=\textwidth]{./images/shot_Atl_2.png}
+%         \caption[]%
+%         {{\small Atlantic Ocean}}    
+%         \label{fig:sub5}
+%     \end{subfigure}
+%     \hfill
+%     \begin{subfigure}[b]{0.46\textwidth}  
+%         \centering 
+%         \includegraphics[width=\textwidth]{./images/shot_Pac_2.png}
+%         \caption[]%
+%         {{\small Pacific Ocean}}    
+%         \label{fig:sub6}
+%     \end{subfigure}
+%     \caption[ ]
+%     {\small Tsunami visualization with an epicenter on Pacific} 
+%     \label{fig:result_view}
+% \end{figure*}
+
+
+\subsection{Comment and Improvement}
 A more reasonable and conventional way to meshing the world ocean is using ocean bathymetry data\cite{amante2009etopo1}, which 
 has been implemented in many oceanographical researches \cite{legrand2006high}. 
 Based on bathymetry, the mesh size is supposed to be smaller in shallow ocean area and larger in deep sea region.
 This can be achieved by importing a \verb|Structured Field| in \verb|Gmsh|.
-Also, we can add a smaller limitations on minimum and maximum meshing size, in order to get a dense mesh.
+Also, we can add a smaller limitations on minimum and maximum meshing size, in order to get a denser mesh.
 
+
+The parameters like epicenter and wavelength can be modified, (also we need to adjust the minimum element size 
+with wavelength) to explore the possible behaviors of tsunami.
+
+
+Meanwhile, we must address that this model is still rough for a global tsunami. More accurate equation based on fluid dynamics
+can be applied, which requires more understanding and knowledge.
 
 %%%%%%%% EXTRA TIPS %%%%%%%%
 
@@ -473,7 +506,7 @@ Also, we can add a smaller limitations on minimum and maximum meshing size, in o
 \bibliographystyle{ieeetr}
 \bibliography{reference}
 
-\newpage
+
 \appendix
 \section{File Inventory Introduction}
 

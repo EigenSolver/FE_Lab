@@ -44,6 +44,7 @@ elements and from 1 to 2 for segments. The function returns an index `i` into
 `gl` return `nothing` otherwise.
 """
 function localtoglobal(active_vertices, domain)
+    # map loca index to global index
     conn = copy(transpose(connectivity(active_vertices, domain, abs)))
     nz = nonzeros(conn)
     rv = rowvals(conn)
@@ -83,6 +84,7 @@ function elementmatrix(mesh, element)
 end
 
 function assemblematrix(mesh, active_vertices)
+    # assemble large equation in the galerkin equation
     n = length(active_vertices)
     S = zeros(n,n)
     gl = localtoglobal(active_vertices, mesh)
@@ -186,9 +188,13 @@ R=6371*1000
 lat=40.4/180*π
 lon=-43.2/180*π
 
+# somewhere at North Pacific
+lat1=15.75/180*π
+lon1=154.5/180*π
+
 epicenter=[lat,lon]
 A=100 # strength of tsunami
-σ=100*1000 # decay rate, 400km
+σ=300*1000 # decay rate, 400km
 
 k=2π/(4e6)
 
